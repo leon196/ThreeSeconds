@@ -1,22 +1,87 @@
 fileFormatVersion: 2
-guid: 531fc4fee2bb23442b7de33b0621376b
-timeCreated: 1461490713
+guid: 19fc34389a53af84e88281a6f9f66f4b
+timeCreated: 1461623739
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: DrawCall_1381
-    100002: DrawCall_1381.001
-    100004: //RootNode
-    400000: DrawCall_1381
-    400002: DrawCall_1381.001
-    400004: //RootNode
-    2300000: DrawCall_1381
-    2300002: DrawCall_1381.001
-    3300000: DrawCall_1381
-    3300002: DrawCall_1381.001
-    4300000: DrawCall_1381.001
-    4300002: DrawCall_1381
+    100000: back
+    100002: bad
+    100004: bad_for
+    100006: chair
+    100008: Doors
+    100010: //RootNode
+    100012: FLOOR
+    100014: glass
+    100016: glass2
+    100018: rest
+    100020: table
+    100022: veshalka
+    100024: wall_staff
+    100026: walls
+    100028: win_anim
+    100030: win_still
+    400000: back
+    400002: bad
+    400004: bad_for
+    400006: chair
+    400008: Doors
+    400010: //RootNode
+    400012: FLOOR
+    400014: glass
+    400016: glass2
+    400018: rest
+    400020: table
+    400022: veshalka
+    400024: wall_staff
+    400026: walls
+    400028: win_anim
+    400030: win_still
+    2300000: back
+    2300002: bad
+    2300004: bad_for
+    2300006: chair
+    2300008: Doors
+    2300010: FLOOR
+    2300012: glass
+    2300014: glass2
+    2300016: rest
+    2300018: table
+    2300020: veshalka
+    2300022: wall_staff
+    2300024: walls
+    2300026: win_anim
+    2300028: win_still
+    3300000: back
+    3300002: bad
+    3300004: bad_for
+    3300006: chair
+    3300008: Doors
+    3300010: FLOOR
+    3300012: glass
+    3300014: glass2
+    3300016: rest
+    3300018: table
+    3300020: veshalka
+    3300022: wall_staff
+    3300024: walls
+    3300026: win_anim
+    3300028: win_still
+    4300000: back
+    4300002: bad
+    4300004: bad_for
+    4300006: chair
+    4300008: Doors
+    4300010: FLOOR
+    4300012: glass
+    4300014: glass2
+    4300016: rest
+    4300018: table
+    4300020: veshalka
+    4300022: wall_staff
+    4300024: walls
+    4300026: win_anim
+    4300028: win_still
   materials:
     importMaterials: 1
     materialName: 0

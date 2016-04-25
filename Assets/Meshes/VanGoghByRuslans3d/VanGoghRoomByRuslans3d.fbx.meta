@@ -1,0 +1,193 @@
+fileFormatVersion: 2
+guid: c2132b7f318b0f24f90937caec45e477
+timeCreated: 1461624723
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: back
+    100002: bad
+    100004: bad_for
+    100006: chair
+    100008: Doors
+    100010: FLOOR
+    100012: glass
+    100014: glass2
+    100016: rest
+    100018: table.002
+    100020: table.007
+    100022: table.010
+    100024: table.011
+    100026: table.012
+    100028: table.013
+    100030: table.014
+    100032: table.015
+    100034: table.016
+    100036: table.017
+    100038: //RootNode
+    100040: veshalka
+    100042: wall_staff
+    100044: walls
+    100046: win_anim
+    100048: win_still
+    400000: back
+    400002: bad
+    400004: bad_for
+    400006: chair
+    400008: Doors
+    400010: FLOOR
+    400012: glass
+    400014: glass2
+    400016: rest
+    400018: table.002
+    400020: table.007
+    400022: table.010
+    400024: table.011
+    400026: table.012
+    400028: table.013
+    400030: table.014
+    400032: table.015
+    400034: table.016
+    400036: table.017
+    400038: //RootNode
+    400040: veshalka
+    400042: wall_staff
+    400044: walls
+    400046: win_anim
+    400048: win_still
+    2300000: back
+    2300002: bad
+    2300004: bad_for
+    2300006: chair
+    2300008: Doors
+    2300010: FLOOR
+    2300012: glass
+    2300014: glass2
+    2300016: rest
+    2300018: table.002
+    2300020: table.007
+    2300022: table.010
+    2300024: table.011
+    2300026: table.012
+    2300028: table.013
+    2300030: table.014
+    2300032: table.015
+    2300034: table.016
+    2300036: table.017
+    2300038: veshalka
+    2300040: wall_staff
+    2300042: walls
+    2300044: win_anim
+    2300046: win_still
+    3300000: back
+    3300002: bad
+    3300004: bad_for
+    3300006: chair
+    3300008: Doors
+    3300010: FLOOR
+    3300012: glass
+    3300014: glass2
+    3300016: rest
+    3300018: table.002
+    3300020: table.007
+    3300022: table.010
+    3300024: table.011
+    3300026: table.012
+    3300028: table.013
+    3300030: table.014
+    3300032: table.015
+    3300034: table.016
+    3300036: table.017
+    3300038: veshalka
+    3300040: wall_staff
+    3300042: walls
+    3300044: win_anim
+    3300046: win_still
+    4300000: table.017
+    4300002: table.016
+    4300004: table.015
+    4300006: table.014
+    4300008: table.013
+    4300010: table.012
+    4300012: table.011
+    4300014: table.010
+    4300016: table.007
+    4300018: table.002
+    4300020: wall_staff
+    4300022: walls
+    4300024: glass2
+    4300026: bad
+    4300028: win_still
+    4300030: FLOOR
+    4300032: bad_for
+    4300034: chair
+    4300036: back
+    4300038: rest
+    4300040: win_anim
+    4300042: glass
+    4300044: Doors
+    4300046: veshalka
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

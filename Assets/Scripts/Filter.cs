@@ -8,6 +8,7 @@ public class Filter : MonoBehaviour
 
 	void Awake () {
 		material = new Material( Shader.Find("Hidden/Filter") );
+		GetComponent<Camera>().nearClipPlane = 0.0001f;
 	}
 
 	void OnRenderImage (RenderTexture source, RenderTexture destination) {

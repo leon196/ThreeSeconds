@@ -38,6 +38,7 @@ public class Panorama : MonoBehaviour
 			cam = go.GetComponent<Camera>();
 			cam.backgroundColor = new Color(0,0,0,0);
 			cam.clearFlags = CameraClearFlags.SolidColor;
+			cam.nearClipPlane = 0.0001f;
 			cam.farClipPlane = 100; // don't render very far into cubemap
 			cam.cullingMask = 1 << 0;
 			cam.enabled = false;
