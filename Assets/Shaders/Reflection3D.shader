@@ -1,16 +1,17 @@
-﻿Shader "Unlit/Reflection"
+﻿Shader "Unlit/Reflection3D"
 {
 	Properties
 	{
 		_MainTex ("Texture", CUBE) = "white" {}
 	}
 	SubShader
-	{
-		Tags { "RenderType"="Opaque" }
-		LOD 100
+	{   		
+		Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
+ 		Pass {
+	    Cull off
+    	Blend SrcAlpha OneMinusSrcAlpha     
+	    ZWrite Off
 
-		Pass
-		{
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag

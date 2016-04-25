@@ -44,9 +44,6 @@ public class FrameBuffer : MonoBehaviour
 			textures[i] = new RenderTexture(1024, 1024, 24, RenderTextureFormat.ARGB32);
 			textures[i].Create();
 			textures[i].filterMode = FilterMode.Point;
-
-			// CUBEMAP
-			textures[i].isCubemap = true;
 		}
 	}
 
