@@ -3,7 +3,8 @@ using System.Collections;
 
 public class PlayerControl : MonoBehaviour {
 
-	float speed = 1f;
+	float speedRotation = 20f;
+	float speedTranslation = 0.1f;
 
 	void Start () 
 	{	
@@ -11,12 +12,12 @@ public class PlayerControl : MonoBehaviour {
 	
 	void Update () 
 	{
-		float h = Input.GetAxis("Mouse X");
-		float v = Input.GetAxis("Mouse Y");
+		float h = Input.GetAxis("Mouse X") * speedRotation * Time.deltaTime;
+		float v = -Input.GetAxis("Mouse Y") * speedRotation * Time.deltaTime;
 
-		transform.Rotate(Vector3.up * h * Time.deltaTime);
-		transform.Rotate(transform.right * h * Time.deltaTime);
+		transform.Rotate(Vector3.up * h);
+		transform.Rotate(transform.right * v);
 
-		transform.Translate(transform.forward * speed * Time.deltaTime);
-	}
+		transform.Translate(transform.forward * speedTranslation * Time.deltaTime);
+  }
 }
