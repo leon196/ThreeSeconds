@@ -1,16 +1,14 @@
-﻿Shader "Unlit/Reflection3D"
+Shader "Unlit/Reflection3DSave"
 {
 	Properties
 	{
 		_MainTex ("Texture", CUBE) = "white" {}
-		_InverseX ("Inverse X", Float) = 0
-		_InverseY ("Inverse Y", Float) = 0
 	}
 	SubShader
 	{   		
 		Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
  		Pass {
-	    Cull off
+	    // Cull off
     	Blend SrcAlpha OneMinusSrcAlpha     
 	    // ZWrite Off
 
@@ -31,22 +29,14 @@
 
 			samplerCUBE _MainTex;
 			float4 _MainTex_ST;
-			float _InverseX;
-			float _InverseY;
 			
 			v2f vert (appdata_full v)
 			{
 				v2f o;
 				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
-
-				// v.vertex.x *= -1.0;
-
 				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
-				// o.viewDir = normalize(WorldSpaceViewDir(v.vertex));
-				// o.normal = normalize(v.normal);
 				o.viewDir = WorldSpaceViewDir(v.vertex);
-				// o.normal = mul(UNITY_MATRIX_MVP, v.normal);
-				o.normal = mul(_Object2World, v.normal);
+				o.normal = v.normal;
 				return o;
 			}
 			
@@ -54,8 +44,6 @@
 			{
 				// fixed4 col = texCUBE(_MainTex, normalize(i.normal));
 				// fixed4 col = texCUBE(_MainTex, reflect(normalize(i.normal), normalize(i.viewDir)));
-				// fixed4 col = texCUBE(_MainTex, reflect(-i.viewDir, i.normal));
-				// float3 normal = normalize(float3(i.normal.x, 0.0, i.normal.z));
 				fixed4 col = texCUBE(_MainTex, reflect(-normalize(i.viewDir), normalize(i.normal)));
 				// fixed4 col = texCUBE(_MainTex, reflect(normalize(i.viewDir), normalize(i.normal)));
 				return col;

@@ -4,106 +4,184 @@ using System.Collections;
 public class PhotonCam : MonoBehaviour
 {
 
-    public float speed = 10;
-    public float rayLength = 0.3f;
+	public float speed = 10;
+	public float rayLength = 0.3f;
 
-    public int gizmoReflections = 10;
+	public int gizmoReflections = 10;
 
-    public bool realTimeControl = true;
-    public float turnSpeed = 0.3f;
+	public bool realTimeControl = true;
+	public float turnSpeed = 0.3f;
+	float directionX = 1f;
+	float directionY = 1f;
 
-    Filter filter;
+	public Material reflectionMaterial;
 
-    void Start ()
-    {
-        filter = GameObject.FindObjectOfType<Filter>();
-    }
+	GameObject triangle;
+	Mesh triangleMesh;
+	Filter filter;
 
-    void OnDrawGizmos()
-    {
-        Ray ray = new Ray(transform.position, transform.forward);
+	void Start ()
+	{
+		filter = GameObject.FindObjectOfType<Filter>();
 
-        Color rayColor = Color.cyan;
+		triangleMesh = new Mesh();
+		triangleMesh.Clear();
+		triangleMesh.vertices = new Vector3[] { new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(0, 0, 0) };
+		triangleMesh.normals = new Vector3[] { new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(0, 0, 0) };
+		triangleMesh.uv = new Vector2[] { new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1) };
+		triangleMesh.triangles = new int[] { 0, 1, 2 };
 
-        int counter = 0;
+		triangle = new GameObject();
+		triangle.AddComponent<MeshRenderer>();
+		triangle.GetComponent<MeshRenderer>().material = reflectionMaterial;
+		triangle.AddComponent<MeshFilter>();
+		// triangle.GetComponent<MeshFilter>().mesh = triangleMesh;
+	}
 
-        while (counter < gizmoReflections)
-        {
-            float distance = 100;
+	void OnDrawGizmos()
+	{
+		Ray ray = new Ray(transform.position, transform.forward);
 
-            Ray newRay = ray;
+		Color rayColor = Color.cyan;
 
-            if (GetReflection(ray, out newRay, 10000, out distance))
-            {
-                Gizmos.color = rayColor;
-                Gizmos.DrawRay(ray.origin, ray.direction * distance);
-                ray = newRay;
-            }
-            else
-            {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawRay(newRay.origin, newRay.direction * 100);
-                return;
-            }
+		int counter = 0;
 
-            // koolkolorz(tm)
-            rayColor.r += 0.01f;
-            rayColor.g -= 0.03f;
+		while (counter < gizmoReflections)
+		{
+			float distance = 100;
 
-            counter++;
-        }
-    }
+			Ray newRay = ray;
 
-    bool GetReflection(Ray ray, out Ray outRay, float maxDistance)
-    {
-        float x;
-        return GetReflection(ray, out outRay, maxDistance, out x);
-    }
+			if (GetReflection(ray, out newRay, 10000, out distance))
+			{
+				Gizmos.color = rayColor;
+				Gizmos.DrawRay(ray.origin, ray.direction * distance);
+				ray = newRay;
+			}
+			else
+			{
+				Gizmos.color = Color.yellow;
+				Gizmos.DrawRay(newRay.origin, newRay.direction * 100);
+				return;
+			}
 
-    bool GetReflection(Ray ray, out Ray outRay, float maxDistance, out float distance)
-    {
-        RaycastHit hit;
+			// koolkolorz(tm)
+			rayColor.r += 0.01f;
+			rayColor.g -= 0.03f;
 
-        if (Physics.Raycast(ray, out hit, maxDistance))
-        {
-            Vector3 outVector = Vector3.Reflect(ray.direction.normalized, hit.normal);
+			counter++;
+		}
+	}
 
-            outRay = new Ray(hit.point, outVector);
-            distance = hit.distance;
+	bool GetReflection(Ray ray, out Ray outRay, float maxDistance)
+	{
+		float x;
+		return GetReflection(ray, out outRay, maxDistance, out x);
+	}
 
-            return true;
-        }
+	bool GetReflection(Ray ray, out Ray outRay, float maxDistance, out float distance)
+	{
+		RaycastHit hit;
 
-        distance = 0;
-        outRay = ray;
-        return false;
-    }
+		if (Physics.Raycast(ray, out hit, maxDistance))
+		{
+			Vector3 outVector = Vector3.Reflect(ray.direction.normalized, hit.normal);
 
-    void FixedUpdate()
-    {
-        transform.Translate(Vector3.forward * speed * Time.fixedDeltaTime, Space.Self);
+			outRay = new Ray(hit.point, outVector);
+			distance = hit.distance;
 
-        Ray ray = new Ray(transform.position, transform.forward);
-        RaycastHit hit;
+			return true;
+		}
 
-        Ray reflectedRay;
+		distance = 0;
+		outRay = ray;
+		return false;
+	}
 
-        if (GetReflection(ray, out reflectedRay, rayLength))
-        {
-            transform.position = reflectedRay.origin; // cause of this reflection is not "seamless", there is a small jump, but it keeps moving along the preview ray
-            transform.rotation = Quaternion.LookRotation(reflectedRay.direction, Vector3.up);
+	void FixedUpdate()
+	{
+		transform.Translate(Vector3.forward * speed * Time.fixedDeltaTime, Space.Self);
 
-            if (filter) 
-            {
-                filter.InverseX();
-            }
-        }
+		Ray ray = new Ray(transform.position, transform.forward);
+		RaycastHit hit;
 
-        if (realTimeControl)
-        {
-            // gimbal lock prone, should not be allowed above/below certain degrees?
-            transform.Rotate(Vector3.up, Input.GetAxis("Horizontal") * turnSpeed, Space.World);
-            transform.Rotate(Vector3.right, Input.GetAxis("Vertical") * turnSpeed, Space.Self);
-        }
-    }
+		Ray reflectedRay;
+
+		// Warp triangle
+/*
+		if (Physics.Raycast(ray, out hit, 10000))
+		{
+			// hit.distance;
+			MeshCollider meshCollider = hit.collider as MeshCollider;
+			if (meshCollider == null || meshCollider.sharedMesh == null)
+				return;
+
+			triangle.transform.position = hit.transform.position;
+			triangle.transform.rotation = hit.transform.rotation;
+			triangle.transform.localScale = hit.transform.localScale;
+			
+			Mesh mesh = meshCollider.sharedMesh;
+			Vector3[] vertices = mesh.vertices;
+			Vector3[] normals = mesh.normals;
+			int[] triangles = mesh.triangles;
+			int i0 = triangles[hit.triangleIndex * 3 + 0];
+			int i1 = triangles[hit.triangleIndex * 3 + 1];
+			int i2 = triangles[hit.triangleIndex * 3 + 2];
+			Vector3 p0 = vertices[i0];
+			Vector3 p1 = vertices[i1];
+			Vector3 p2 = vertices[i2];
+			Vector3 n0 = normals[i0];
+			Vector3 n1 = normals[i1];
+			Vector3 n2 = normals[i2];
+
+			// Camera.main.transform.TransformPoint(Camera.main.transform.)
+
+			Vector3[] triangleVertices = triangleMesh.vertices;
+			Vector3[] triangleNormals = triangleMesh.normals;
+
+			triangleVertices[0] = p0;
+			triangleVertices[1] = p1;
+			triangleVertices[2] = p2;
+
+			triangleNormals[0] = n0;
+			triangleNormals[1] = n1;
+			triangleNormals[2] = n2;
+
+			triangleMesh.vertices = triangleVertices;
+			triangleMesh.normals = triangleVertices;
+			triangleMesh.RecalculateBounds();
+		}
+*/
+		// Bounce
+
+		if (GetReflection(ray, out reflectedRay, rayLength))
+		{
+			// transform.position = reflectedRay.origin; // cause of this reflection is not "seamless", there is a small jump, but it keeps moving along the preview ray
+			transform.position = reflectedRay.origin + reflectedRay.direction * rayLength;
+			// transform.rotation = Quaternion.LookRotation(reflectedRay.direction, Vector3.up);
+			// Vector3 normal = Vector3.Normalize(Vector3.Cross(reflectedRay.direction, ray.direction));
+			transform.rotation = Quaternion.LookRotation(reflectedRay.direction, Vector3.up);
+			// transform.forward = reflectedRay.direction;
+
+			InverseX();
+		}
+
+		if (realTimeControl)
+		{
+			// gimbal lock prone, should not be allowed above/below certain degrees?
+			transform.Rotate(Vector3.up, Input.GetAxis("Horizontal") * turnSpeed * directionX, Space.World);
+			transform.Rotate(Vector3.right, Input.GetAxis("Vertical") * turnSpeed * directionY, Space.Self);
+			transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * turnSpeed * directionX, Space.World);
+			transform.Rotate(Vector3.right, -Input.GetAxis("Mouse Y") * turnSpeed * directionY, Space.Self);
+		}
+	}
+
+	void InverseX () 
+	{
+		directionX *= -1f;
+		if (filter)
+		{
+			filter.InverseX();
+		}
+	}
 }
