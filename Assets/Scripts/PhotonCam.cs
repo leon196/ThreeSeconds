@@ -36,6 +36,9 @@ public class PhotonCam : MonoBehaviour
 		triangle.GetComponent<MeshRenderer>().material = reflectionMaterial;
 		triangle.AddComponent<MeshFilter>();
 		// triangle.GetComponent<MeshFilter>().mesh = triangleMesh;
+
+		reflectionMaterial.SetVector("_RayDirection", Vector3.left);
+		reflectionMaterial.SetFloat("_RayDistance", 100f);
 	}
 
 	void OnDrawGizmos()
@@ -108,14 +111,19 @@ public class PhotonCam : MonoBehaviour
 		Ray reflectedRay;
 
 		// Warp triangle
-/*
+
 		if (Physics.Raycast(ray, out hit, 10000))
 		{
-			// hit.distance;
-			MeshCollider meshCollider = hit.collider as MeshCollider;
-			if (meshCollider == null || meshCollider.sharedMesh == null)
-				return;
+			reflectionMaterial.SetVector("_RayDirection", hit.normal);
+			reflectionMaterial.SetFloat("_RayDistance", hit.distance);
 
+			// hit.distance;
+			// MeshCollider meshCollider = hit.collider as MeshCollider;
+			// if (meshCollider == null || meshCollider.sharedMesh == null)
+			// 	return;
+
+
+/*
 			triangle.transform.position = hit.transform.position;
 			triangle.transform.rotation = hit.transform.rotation;
 			triangle.transform.localScale = hit.transform.localScale;
@@ -150,17 +158,24 @@ public class PhotonCam : MonoBehaviour
 			triangleMesh.vertices = triangleVertices;
 			triangleMesh.normals = triangleVertices;
 			triangleMesh.RecalculateBounds();
+			*/
 		}
-*/
+
 		// Bounce
 
 		if (GetReflection(ray, out reflectedRay, rayLength))
 		{
 			// transform.position = reflectedRay.origin; // cause of this reflection is not "seamless", there is a small jump, but it keeps moving along the preview ray
-			transform.position = reflectedRay.origin + reflectedRay.direction * rayLength;
-			// transform.rotation = Quaternion.LookRotation(reflectedRay.direction, Vector3.up);
+			transform.position = reflectedRay.origin;// + reflectedRay.direction * rayLength;
+
+			Vector3 dir = reflectedRay.direction;
+			// dir.y = 0.0f;
+			// dir = Vector3.Normalize(dir);
+
+			transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+
 			// Vector3 normal = Vector3.Normalize(Vector3.Cross(reflectedRay.direction, ray.direction));
-			transform.rotation = Quaternion.LookRotation(reflectedRay.direction, Vector3.up);
+			// transform.rotation = Quaternion.LookRotation(reflectedRay.direction, normal);
 			// transform.forward = reflectedRay.direction;
 
 			InverseX();

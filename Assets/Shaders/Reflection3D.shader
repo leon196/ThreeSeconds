@@ -31,6 +31,8 @@
 
 			samplerCUBE _MainTex;
 			float4 _MainTex_ST;
+			float3 _RayDirection;
+			float _RayDistance;
 			float _InverseX;
 			float _InverseY;
 			
@@ -56,7 +58,17 @@
 				// fixed4 col = texCUBE(_MainTex, reflect(normalize(i.normal), normalize(i.viewDir)));
 				// fixed4 col = texCUBE(_MainTex, reflect(-i.viewDir, i.normal));
 				// float3 normal = normalize(float3(i.normal.x, 0.0, i.normal.z));
-				fixed4 col = texCUBE(_MainTex, reflect(-normalize(i.viewDir), normalize(i.normal)));
+				// fixed4 col = texCUBE(_MainTex, reflect(-normalize(i.viewDir), normalize(i.normal)));
+
+				float t = smoothstep(0.0, 0.01, _RayDistance);
+				float3 ray = _RayDirection;
+
+				ray.y = 0.0;
+				ray = normalize(ray);
+
+				float3 normal = lerp(normalize(ray), normalize(i.normal), t);
+
+				fixed4 col = texCUBE(_MainTex, reflect(-normalize(i.viewDir), normal));
 				// fixed4 col = texCUBE(_MainTex, reflect(normalize(i.viewDir), normalize(i.normal)));
 				return col;
 			}
