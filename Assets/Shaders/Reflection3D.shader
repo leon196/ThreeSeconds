@@ -48,7 +48,12 @@
 				// o.normal = normalize(v.normal);
 				o.viewDir = WorldSpaceViewDir(v.vertex);
 				// o.normal = mul(UNITY_MATRIX_MVP, v.normal);
-				o.normal = mul(_Object2World, v.normal);
+				// o.normal = v.normal;
+				// o.normal = mul(UNITY_MATRIX_MVP, v.normal);
+				float3 normal = v.normal;
+				normal.y = 0.0;
+				normal = normalize(normal);
+				o.normal = mul(_Object2World, normal);
 				return o;
 			}
 			
@@ -60,16 +65,12 @@
 				// float3 normal = normalize(float3(i.normal.x, 0.0, i.normal.z));
 				// fixed4 col = texCUBE(_MainTex, reflect(-normalize(i.viewDir), normalize(i.normal)));
 
-				float t = smoothstep(0.0, 0.01, _RayDistance);
+				float t = smoothstep(0.0, 0.1, _RayDistance);
 				float3 ray = _RayDirection;
-
 				ray.y = 0.0;
-				ray = normalize(ray);
-
-				float3 normal = lerp(normalize(ray), normalize(i.normal), t);
-
+				float3 normal = lerp(normalize(ray), normalize(i.normal), 0.0);
 				fixed4 col = texCUBE(_MainTex, reflect(-normalize(i.viewDir), normal));
-				// fixed4 col = texCUBE(_MainTex, reflect(normalize(i.viewDir), normalize(i.normal)));
+				// fixed4 col = texCUBE(_MainTex, reflect(-normalize(i.viewDir), normalize(i.normal)));
 				return col;
 			}
 			ENDCG
