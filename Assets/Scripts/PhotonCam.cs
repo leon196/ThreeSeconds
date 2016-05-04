@@ -15,28 +15,11 @@ public class PhotonCam : MonoBehaviour
 	float directionY = 1f;
 
 	public Material reflectionMaterial;
-	public Camera reflectionCamera;
-
-	GameObject triangle;
-	Mesh triangleMesh;
 	Filter filter;
 
 	void Start ()
 	{
 		filter = GameObject.FindObjectOfType<Filter>();
-
-		triangleMesh = new Mesh();
-		triangleMesh.Clear();
-		triangleMesh.vertices = new Vector3[] { new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(0, 0, 0) };
-		triangleMesh.normals = new Vector3[] { new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(0, 0, 0) };
-		triangleMesh.uv = new Vector2[] { new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1) };
-		triangleMesh.triangles = new int[] { 0, 1, 2 };
-
-		triangle = new GameObject();
-		triangle.AddComponent<MeshRenderer>();
-		triangle.GetComponent<MeshRenderer>().material = reflectionMaterial;
-		triangle.AddComponent<MeshFilter>();
-		// triangle.GetComponent<MeshFilter>().mesh = triangleMesh;
 
 		reflectionMaterial.SetVector("_RayDirection", Vector3.left);
 		reflectionMaterial.SetFloat("_RayDistance", 100f);
@@ -104,65 +87,21 @@ public class PhotonCam : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		transform.Translate(Vector3.forward * speed * Time.fixedDeltaTime, Space.Self);
 
 		Ray ray = new Ray(transform.position, transform.forward);
 		RaycastHit hit;
 
 		Ray reflectedRay;
 
-		// Warp triangle
+		// Warp shader effect
 
-		if (Physics.Raycast(ray, out hit, 10000))
-		{
+		if (Physics.Raycast(ray, out hit, 100f)) {
 			reflectionMaterial.SetVector("_RayDirection", hit.normal);
+			// reflectionMaterial.SetVector("_RayDirection", Vector3.Reflect(transform.forward.normalized, hit.normal));
 			reflectionMaterial.SetFloat("_RayDistance", hit.distance);
-
-			// hit.distance;
-			// MeshCollider meshCollider = hit.collider as MeshCollider;
-			// if (meshCollider == null || meshCollider.sharedMesh == null)
-			// 	return;
-
-
-/*
-			triangle.transform.position = hit.transform.position;
-			triangle.transform.rotation = hit.transform.rotation;
-			triangle.transform.localScale = hit.transform.localScale;
-			
-			Mesh mesh = meshCollider.sharedMesh;
-			Vector3[] vertices = mesh.vertices;
-			Vector3[] normals = mesh.normals;
-			int[] triangles = mesh.triangles;
-			int i0 = triangles[hit.triangleIndex * 3 + 0];
-			int i1 = triangles[hit.triangleIndex * 3 + 1];
-			int i2 = triangles[hit.triangleIndex * 3 + 2];
-			Vector3 p0 = vertices[i0];
-			Vector3 p1 = vertices[i1];
-			Vector3 p2 = vertices[i2];
-			Vector3 n0 = normals[i0];
-			Vector3 n1 = normals[i1];
-			Vector3 n2 = normals[i2];
-
-			// Camera.main.transform.TransformPoint(Camera.main.transform.)
-
-			Vector3[] triangleVertices = triangleMesh.vertices;
-			Vector3[] triangleNormals = triangleMesh.normals;
-
-			triangleVertices[0] = p0;
-			triangleVertices[1] = p1;
-			triangleVertices[2] = p2;
-
-			triangleNormals[0] = n0;
-			triangleNormals[1] = n1;
-			triangleNormals[2] = n2;
-
-			triangleMesh.vertices = triangleVertices;
-			triangleMesh.normals = triangleVertices;
-			triangleMesh.RecalculateBounds();
-			*/
+		} else {
+			reflectionMaterial.SetFloat("_RayDistance", 1000f);
 		}
-
-		// Bounce
 
 		if (GetReflection(ray, out reflectedRay, rayLength))
 		{
@@ -171,12 +110,13 @@ public class PhotonCam : MonoBehaviour
 
 			Vector3 dir = reflectedRay.direction;
 			// dir.y = 0.0f;
-			// dir = Vector3.Normalize(dir);
+			dir = Vector3.Normalize(dir);
 
 			transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+			// transform.Rotate(Vector3.forward * Vector3.Dot(dir, Vector3.up) * 360f, Space.Self);
 
-			// Vector3 normal = Vector3.Normalize(Vector3.Cross(reflectedRay.direction, ray.direction));
-			// transform.rotation = Quaternion.LookRotation(reflectedRay.direction, normal);
+			// Vector3 up = Vector3.Cross(ray.direction, reflectedRay.direction).normalized;
+			// transform.rotation = Quaternion.LookRotation(reflectedRay.direction, up);
 			// transform.forward = reflectedRay.direction;
 
 			InverseX();
@@ -184,7 +124,10 @@ public class PhotonCam : MonoBehaviour
 
 		if (realTimeControl)
 		{
-			// gimbal lock prone, should not be allowed above/below certain degrees?
+			// if (Input.GetMouseButton(0)) {
+				transform.Translate(Vector3.forward * speed * Time.fixedDeltaTime, Space.Self);
+			// }
+
 			transform.Rotate(Vector3.up, Input.GetAxis("Horizontal") * turnSpeed * directionX, Space.World);
 			transform.Rotate(Vector3.right, Input.GetAxis("Vertical") * turnSpeed * directionY, Space.Self);
 			transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * turnSpeed * directionX, Space.World);
