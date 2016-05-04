@@ -30,6 +30,17 @@ ModelImporter:
     100044: walls
     100046: win_anim
     100048: win_still
+    100050: rest.001
+    100052: rest.002
+    100054: table
+    100056: table.001
+    100058: table.003
+    100060: veshalka.001
+    100062: veshalka.002
+    100064: wall_staff.001
+    100066: wall_staff.002
+    100068: wall_staff.003
+    100070: wall_staff.004
     400000: back
     400002: bad
     400004: bad_for
@@ -55,6 +66,17 @@ ModelImporter:
     400044: walls
     400046: win_anim
     400048: win_still
+    400050: rest.001
+    400052: rest.002
+    400054: table
+    400056: table.001
+    400058: table.003
+    400060: veshalka.001
+    400062: veshalka.002
+    400064: wall_staff.001
+    400066: wall_staff.002
+    400068: wall_staff.003
+    400070: wall_staff.004
     2300000: back
     2300002: bad
     2300004: bad_for
@@ -79,6 +101,17 @@ ModelImporter:
     2300042: walls
     2300044: win_anim
     2300046: win_still
+    2300048: rest.001
+    2300050: rest.002
+    2300052: table
+    2300054: table.001
+    2300056: table.003
+    2300058: veshalka.001
+    2300060: veshalka.002
+    2300062: wall_staff.001
+    2300064: wall_staff.002
+    2300066: wall_staff.003
+    2300068: wall_staff.004
     3300000: back
     3300002: bad
     3300004: bad_for
@@ -103,6 +136,17 @@ ModelImporter:
     3300042: walls
     3300044: win_anim
     3300046: win_still
+    3300048: rest.001
+    3300050: rest.002
+    3300052: table
+    3300054: table.001
+    3300056: table.003
+    3300058: veshalka.001
+    3300060: veshalka.002
+    3300062: wall_staff.001
+    3300064: wall_staff.002
+    3300066: wall_staff.003
+    3300068: wall_staff.004
     4300000: table.017
     4300002: table.016
     4300004: table.015
@@ -127,6 +171,17 @@ ModelImporter:
     4300042: glass
     4300044: Doors
     4300046: veshalka
+    4300048: veshalka.002
+    4300050: veshalka.001
+    4300052: wall_staff.004
+    4300054: wall_staff.003
+    4300056: wall_staff.002
+    4300058: wall_staff.001
+    4300060: rest.002
+    4300062: rest.001
+    4300064: table.003
+    4300066: table.001
+    4300068: table
   materials:
     importMaterials: 1
     materialName: 0

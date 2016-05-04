@@ -15,6 +15,7 @@ public class PhotonCam : MonoBehaviour
 	float directionY = 1f;
 
 	public Material reflectionMaterial;
+	public Camera reflectionCamera;
 
 	GameObject triangle;
 	Mesh triangleMesh;
