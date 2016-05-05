@@ -1,44 +1,63 @@
-﻿Shader "Custom/Reflection" {
-	Properties {
-		_MainTex ("Texture", CUBE) = "white" {}
+﻿Shader "Unlit/Reflection"
+{
+	Properties
+	{
+		_MainTex ("Texture", 2D) = "white" {}
+		// _InverseX ("Inverse X", Float) = 0
+		// _InverseY ("Inverse Y", Float) = 0
 	}
 	SubShader
 	{   		
 		Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
-		LOD 200
-		
-		CGPROGRAM
-		// Physically based Standard lighting model, and enable shadows on all light types
-		#pragma surface surf Standard fullforwardshadows vertex:vert
-		#include "UnityCG.cginc"
+ 		Pass {
+	    Cull off
+    	Blend SrcAlpha OneMinusSrcAlpha     
+	    // ZWrite Off
 
-		// Use shader model 3.0 target, to get nicer looking lighting
-		#pragma target 3.0
+			CGPROGRAM
+			#pragma vertex vert
+			#pragma fragment frag
+			
+			#include "UnityCG.cginc"
+			#include "Utils.cginc"
 
-		samplerCUBE _MainTex;
+			struct v2f
+			{
+				float2 uv : TEXCOORD0;
+				float4 vertex : SV_POSITION;
+				float4 screenPos : TEXCOORD1;
+				// float3 viewDir : TEXCOORD2;
+				// float3 normal : NORMAL;
+			};
 
-		struct Input {
-			float2 uv_MainTex;
-			float3 viewDir;
-			float3 normal;
-		};
-
-    void vert (inout appdata_full v, out Input o) {
-        UNITY_INITIALIZE_OUTPUT(Input,o);
-        o.normal = v.normal;
-    }
-
-		void surf (Input i, inout SurfaceOutputStandard o) {
-			// Albedo comes from a texture tinted by color
-			// fixed4 c = tex2D (_MainTex, i.uv_MainTex) * _Color;
-			// o.Albedo = c.rgb;
-			// Metallic and smoothness come from slider variables
-			// o.Metallic = _Metallic;
-			// o.Smoothness = _Glossiness;
-			o.Emission = texCUBE(_MainTex, reflect(-normalize(i.viewDir), normalize(i.normal))).rgb;
-			o.Alpha = 1.0;
+			sampler2D _MainTex;
+			float4 _MainTex_ST;
+			sampler2D _CameraTexture;
+			// samplerCUBE _PanoramaTexture;
+			// float _PlayerDistance;
+			// float _InverseX;
+			// float _InverseY;
+			
+			v2f vert (appdata_full v)
+			{
+				v2f o;
+				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+				// o.viewDir = WorldSpaceViewDir(v.vertex);
+				// o.normal = mul(_Object2World, v.normal);
+    		o.screenPos = ComputeScreenPos(o.vertex);
+				return o;
+			}
+			
+			fixed4 frag (v2f i) : SV_Target
+			{
+				// float t = smoothstep(0.5, 1.0, _PlayerDistance);
+				fixed4 col = tex2D(_CameraTexture, i.screenPos.xy / i.screenPos.w);
+				// fixed4 pano = texCUBE(_PanoramaTexture, reflect(-normalize(i.viewDir), normalize(i.normal)));
+				// return lerp(col, pano, t);
+				return col;
+			}
+			ENDCG
 		}
-		ENDCG
 	}
-	FallBack "Diffuse"
 }

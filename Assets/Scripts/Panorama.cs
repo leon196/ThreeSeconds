@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Panorama : MonoBehaviour 
 {
-	int cubemapSize = 1024;
 	bool oneFacePerFrame = false;
 	Camera cam;
 	int currentTexture;
@@ -44,8 +43,7 @@ public class Panorama : MonoBehaviour
 			cam.enabled = false;
 		}
 
-		material.mainTexture = GetCurrentTexture();
-
+		Shader.SetGlobalTexture("_PanoramaTexture", GetCurrentTexture());
 		NextTexture();
 		
 		cam.transform.position = transform.position;

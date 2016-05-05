@@ -15,14 +15,21 @@ public class PhotonCam : MonoBehaviour
 	float directionY = 1f;
 
 	public Material reflectionMaterial;
+	public Camera reflectionCamera;
 	Filter filter;
 
 	void Start ()
 	{
 		filter = GameObject.FindObjectOfType<Filter>();
 
-		reflectionMaterial.SetVector("_RayDirection", Vector3.left);
-		reflectionMaterial.SetFloat("_RayDistance", 100f);
+		// Renderer[] renderArray = GameObject.FindObjectsOfType<Renderer>();
+		// foreach (Renderer renderer in renderArray) {
+		// 	if (renderer.material.shader.name == "Unlit/Reflection") {
+		// 		renderer.gameObject.AddComponent<DistanceTo>();
+		// 		renderer.gameObject.GetComponent<DistanceTo>().target = transform;
+		// 		renderer.gameObject.GetComponent<DistanceTo>().material = renderer.material;
+		// 	}
+		// }
 	}
 
 	void OnDrawGizmos()
@@ -90,36 +97,20 @@ public class PhotonCam : MonoBehaviour
 
 		Ray ray = new Ray(transform.position, transform.forward);
 		RaycastHit hit;
-
 		Ray reflectedRay;
+		float maxDist = 100f;
 
-		// Warp shader effect
-
-		if (Physics.Raycast(ray, out hit, 100f)) {
-			reflectionMaterial.SetVector("_RayDirection", hit.normal);
-			// reflectionMaterial.SetVector("_RayDirection", Vector3.Reflect(transform.forward.normalized, hit.normal));
-			reflectionMaterial.SetFloat("_RayDistance", hit.distance);
-		} else {
-			reflectionMaterial.SetFloat("_RayDistance", 1000f);
+		if (Physics.Raycast(ray, out hit, maxDist))
+		{
+			Vector3 reflection = Vector3.Reflect(transform.forward.normalized, hit.normal);
+			reflectionCamera.transform.position = hit.point + reflection * (1f - Mathf.Max(0f, Mathf.Min(1f, hit.distance)));
+			reflectionCamera.transform.rotation = Quaternion.LookRotation(reflection, Vector3.up);
 		}
 
 		if (GetReflection(ray, out reflectedRay, rayLength))
 		{
-			// transform.position = reflectedRay.origin; // cause of this reflection is not "seamless", there is a small jump, but it keeps moving along the preview ray
-			transform.position = reflectedRay.origin;// + reflectedRay.direction * rayLength;
-
-			Vector3 dir = reflectedRay.direction;
-			// dir.y = 0.0f;
-			dir = Vector3.Normalize(dir);
-
-			transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
-			// transform.Rotate(Vector3.forward * Vector3.Dot(dir, Vector3.up) * 360f, Space.Self);
-
-			// Vector3 up = Vector3.Cross(ray.direction, reflectedRay.direction).normalized;
-			// transform.rotation = Quaternion.LookRotation(reflectedRay.direction, up);
-			// transform.forward = reflectedRay.direction;
-
-			InverseX();
+			transform.position = reflectionCamera.transform.position;
+			transform.rotation = reflectionCamera.transform.rotation;
 		}
 
 		if (realTimeControl)
