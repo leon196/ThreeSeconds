@@ -92,7 +92,7 @@ public class PhotonCam : MonoBehaviour
 		return false;
 	}
 
-	void FixedUpdate()
+	void Update()
 	{
 
 		Ray ray = new Ray(transform.position, transform.forward);
@@ -103,7 +103,7 @@ public class PhotonCam : MonoBehaviour
 		if (Physics.Raycast(ray, out hit, maxDist))
 		{
 			Vector3 reflection = Vector3.Reflect(transform.forward.normalized, hit.normal);
-			reflectionCamera.transform.position = hit.point + reflection * (1f - Mathf.Max(0f, Mathf.Min(1f, hit.distance)));
+			reflectionCamera.transform.position = hit.point;// + reflection * (1f - Mathf.Max(0f, Mathf.Min(1f, hit.distance)));
 			reflectionCamera.transform.rotation = Quaternion.LookRotation(reflection, Vector3.up);
 		}
 
@@ -111,6 +111,7 @@ public class PhotonCam : MonoBehaviour
 		{
 			transform.position = reflectionCamera.transform.position;
 			transform.rotation = reflectionCamera.transform.rotation;
+			InverseX();
 		}
 
 		if (realTimeControl)
@@ -119,10 +120,10 @@ public class PhotonCam : MonoBehaviour
 				transform.Translate(Vector3.forward * speed * Time.fixedDeltaTime, Space.Self);
 			// }
 
-			transform.Rotate(Vector3.up, Input.GetAxis("Horizontal") * turnSpeed * directionX, Space.World);
-			transform.Rotate(Vector3.right, Input.GetAxis("Vertical") * turnSpeed * directionY, Space.Self);
-			transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * turnSpeed * directionX, Space.World);
-			transform.Rotate(Vector3.right, -Input.GetAxis("Mouse Y") * turnSpeed * directionY, Space.Self);
+			transform.Rotate(Vector3.up, Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime * directionX, Space.World);
+			transform.Rotate(Vector3.right, Input.GetAxis("Vertical") * turnSpeed * Time.deltaTime * directionY, Space.Self);
+			transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * turnSpeed * Time.deltaTime * directionX, Space.World);
+			transform.Rotate(Vector3.right, -Input.GetAxis("Mouse Y") * turnSpeed * Time.deltaTime * directionY, Space.Self);
 		}
 	}
 

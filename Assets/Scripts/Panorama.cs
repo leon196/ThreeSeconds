@@ -44,6 +44,7 @@ public class Panorama : MonoBehaviour
 		}
 
 		Shader.SetGlobalTexture("_PanoramaTexture", GetCurrentTexture());
+		material.mainTexture = GetCurrentTexture();
 		NextTexture();
 		
 		cam.transform.position = transform.position;
